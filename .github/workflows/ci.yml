@@ -10,6 +10,11 @@ on:
   push:
     branches: [ "main" ]
 
+# More CD stuff
+#permissions:
+#  id-token: write
+#  contents: read
+
 jobs:
   build:
     name: CI
@@ -50,3 +55,11 @@ jobs:
 #        with: 
 #          app-name: app-dometrain-noah.dev
 #          package: artifacts/
+#      - name: Azure login
+#        uses: azure/login@v2
+#        with:
+# make sure to create these secrets on GitHub and Client ID is from your Managed Identity
+#          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+# azure has all 3 values listed under Properties but you need to make a Managed Identity for the top one.
+#          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
