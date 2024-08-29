@@ -1,4 +1,4 @@
-#This is our continuous integration (CI).
+#This is our continuous integration (CI). It creates an artifact folder with our code compiled.
 name: CI 
 
 env:
