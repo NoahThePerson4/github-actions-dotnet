@@ -16,6 +16,7 @@ GitHubActions.txt
 
 # Mono auto generated files
 mono_crash.*
+.github/workflows/step-deploy.yml
 
 # Build results
 [Dd]ebug/
