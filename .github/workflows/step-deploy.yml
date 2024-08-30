@@ -5,6 +5,12 @@ on:
         env:
           required: true
           type: string
+        resource_group_name:
+          required: true
+          type: string
+        app_service_name:
+          required: true
+          type: string
       secrets:
           AZURE_CLIENT_ID:
             required: true
@@ -39,6 +45,11 @@ jobs:
         - name: "Deploy to Azure App Service"
           uses: azure/webapps-deploy@v2
           with:
-            app-name: app-dometrain-github-actions-noah-${{ inputs.env }}
-# if you do use this code in other repositories keep in mind not all of them will call the folder artifacts so it might be a good idea to replace this with an enviroment variable.
+            app-name: ${{inputs.app_service_name}}
+# if you do use this code in other repositories keep in mind not all of them will call the folder artifacts so it might be a good idea to replace this with an enviroment variable. Same with app-name.
+            slot-name: slot
             package: artifacts/
+        - name: Swap slots
+          run:
+          #az is azure
+            az webapp deployment slot swap -g ${{ inputs.resource_group_name }} -n ${{ inputs.app_service_name }} --slot slot --target-slot production --verbose
