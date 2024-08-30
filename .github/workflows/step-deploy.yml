@@ -18,26 +18,26 @@ jobs:
       runs-on: ubuntu-latest
       environment: ${{ inputs.env }}
     # you need this download step because multiple steps can't share things so the artifact made earlier can't just be used by this and insteads you must download it.
-      # steps: 
-      #   - uses: actions/download-artifact@v4
-      #     with:
-      #         name: dometrain-artifact
-      #         path: artifacts/
-      #   - name: 'Azure login'
-      #     uses: azure/webapps-deploy@v2
-      #     with: 
-      #       app-name: app-dometrain-noah-dev
-      #       package: artifacts/
-      #   - name: Azure login
-      #     uses: azure/login@v2
-      #     with:
+      steps: 
+        - uses: actions/download-artifact@v4
+          with:
+              name: dometrain-artifact
+              path: artifacts/
+        - name: 'Azure login'
+          uses: azure/webapps-deploy@v2
+          with: 
+            app-name: app-dometrain-noah-dev
+            package: artifacts/
+        - name: Azure login
+          uses: azure/login@v2
+          with:
     # make sure to create these secrets on GitHub and Client ID is from your Managed Identity
-            # client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
     # azure has all 3 values listed under Properties but you need to make a Managed Identity for the top one.
-        #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        # - name: "Deploy to Azure App Service"
-        #   uses: azure/webapps-deploy@v2
-        #   with:
-        #     app-name: app-dometrain-github-actions-noah-${{ inputs.env }}
-        #     package: artifacts/
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        - name: "Deploy to Azure App Service"
+          uses: azure/webapps-deploy@v2
+          with:
+            app-name: app-dometrain-github-actions-noah-${{ inputs.env }}
+            package: artifacts/
