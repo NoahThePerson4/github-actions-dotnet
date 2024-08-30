@@ -42,9 +42,10 @@ jobs:
   deploy_dev:
    name: Deploy Dev
    needs: build
-   uses: ./github/workflows/step-deploy.yml
+   uses: ./.github/workflows/step-deploy.yml
    with:
      env: dev
+   secrets: inherit
 
 #deploy Prod.  
   deploy_prod:
