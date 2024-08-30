@@ -1,22 +1,22 @@
-# name: "Step - Deploy"
-# on: 
-#     workflow_call:
-#       inputs:
-#         env:
-#           required: true
-#           type: string
-#       secrets:
-#           AZURE_CLIENT_ID:
-#             required: true
-#           AZURE_TENANT_ID:
-#             required: true
-#           AZURE_SUBSCRIPTION_ID:
-#             required: true
-# jobs:
-#   deploy:
-#       name: Deploy ${{ inputs.env }}
-#       runs-on: ubuntu-latest
-#       environment: ${{ inputs.env }}
+name: "Step - Deploy"
+on: 
+    workflow_call:
+      inputs:
+        env:
+          required: true
+          type: string
+      secrets:
+          AZURE_CLIENT_ID:
+            required: true
+          AZURE_TENANT_ID:
+            required: true
+          AZURE_SUBSCRIPTION_ID:
+            required: true
+jobs:
+  deploy:
+      name: Deploy ${{ inputs.env }}
+      runs-on: ubuntu-latest
+      environment: ${{ inputs.env }}
     # you need this download step because multiple steps can't share things so the artifact made earlier can't just be used by this and insteads you must download it.
       # steps: 
       #   - uses: actions/download-artifact@v4
