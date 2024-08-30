@@ -11,45 +11,62 @@ on:
         app_service_name:
           required: true
           type: string
-      secrets:
-          AZURE_CLIENT_ID:
-            required: true
-          AZURE_TENANT_ID:
-            required: true
-          AZURE_SUBSCRIPTION_ID:
-            required: true
+      # secrets:
+      #     AZURE_CLIENT_ID:
+      #       required: true
+      #     AZURE_TENANT_ID:
+      #       required: true
+      #     AZURE_SUBSCRIPTION_ID:
+      #       required: true
 jobs:
   deploy:
       name: Deploy ${{ inputs.env }}
       runs-on: ubuntu-latest
       environment: ${{ inputs.env }}
     # you need this download step because multiple steps can't share things so the artifact made earlier can't just be used by this and insteads you must download it.
-      steps: 
-        - uses: actions/download-artifact@v4
-          with:
-              name: dometrain-artifact
-              path: artifacts/
-        - name: 'Azure login'
-          uses: azure/webapps-deploy@v2
-          with: 
-            app-name: app-dometrain-noah-dev
-            package: artifacts/
-        - name: Azure login
-          uses: azure/login@v2
-          with:
+      steps:
+      #dummy steps so it doesn't complain
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0
+    # we need this because the bicep file is not going into artifacts so we have to checkout the repository to get the bicep file. 
+        # - uses: actions/checkout@v4
+        # - uses: actions/download-artifact@v4
+        #   with:
+        #       name: dometrain-artifact
+        #       path: artifacts/
+        # - name: 'Azure login'
+        #   uses: azure/webapps-deploy@v2
+        #   with: 
+        #     app-name: app-dometrain-noah-dev
+        #     package: artifacts/
+        # - name: Azure login
+        #   uses: azure/login@v2
+        #   with:
     # make sure to create these secrets on GitHub and Client ID is from your Managed Identity
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            # client-id: ${{ secrets.AZURE_CLIENT_ID }}
     # azure has all 3 values listed under Properties but you need to make a Managed Identity for the top one.
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        - name: "Deploy to Azure App Service"
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: ${{inputs.app_service_name}}
+            # tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#For the bicep file and IAC.
+        # - name: Run Bicep
+        #   run: |
+        #    az deployment group create \
+        #     --name ${{ inputs.env }}-deployment-${{ github.run_number }} \
+        #     --template-file infrastructure/main.bicep \
+        #     --parameters infrastructure/environments/${{ inputs.env }}.bicepparam \
+        #     --resource-group ${{ inputs.resource_group_name }} \
+        #     --verbose      
+
+        # - name: "Deploy to Azure App Service"
+        #   uses: azure/webapps-deploy@v2
+        #   with:
+        #     app-name: ${{inputs.app_service_name}}
 # if you do use this code in other repositories keep in mind not all of them will call the folder artifacts so it might be a good idea to replace this with an enviroment variable. Same with app-name.
-            slot-name: slot
-            package: artifacts/
-        - name: Swap slots
-          run:
+        #     slot-name: slot
+        #     package: artifacts/
+        # - name: Swap slots
+        #   run:
           #az is azure
-            az webapp deployment slot swap -g ${{ inputs.resource_group_name }} -n ${{ inputs.app_service_name }} --slot slot --target-slot production --verbose
+            # az webapp deployment slot swap -g ${{ inputs.resource_group_name }} -n ${{ inputs.app_service_name }} --slot slot --target-slot production --verbose
