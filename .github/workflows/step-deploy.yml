@@ -40,4 +40,5 @@ jobs:
           uses: azure/webapps-deploy@v2
           with:
             app-name: app-dometrain-github-actions-noah-${{ inputs.env }}
+# if you do use this code in other repositories keep in mind not all of them will call the folder artifacts so it might be a good idea to replace this with an enviroment variable.
             package: artifacts/
